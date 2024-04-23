@@ -1,7 +1,13 @@
 const express = require('express');
+//need to bring in the apollo server and middleware for express and utils
+const { ApolloServer } = require('@apollo/server');
+const { expressMiddleware } = require('@apollo/server/express4');
+const { typeDefs, resolvers } = require("./schemas");
+const { authMiddleware } = require("./utils/auth");
+
 const path = require('path');
 const db = require('./config/connection');
-const routes = require('./routes');
+//const routes = require('./routes'); // I dont think that we need the routes here
 
 const app = express();
 const PORT = process.env.PORT || 3001;
