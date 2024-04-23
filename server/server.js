@@ -11,9 +11,21 @@ const db = require('./config/connection');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+const startApolloServer = async () => {
+  await server.start();
+  
+  app.use(express.urlencoded({ extended: false }));
+  app.use(express.json());
+  
+  app.use('/graphql', expressMiddleware(server, {
+    context: authMiddleware
+  }));
+
 
 // if we're in production, serve client/build as static assets
 if (process.env.NODE_ENV === 'production') {
